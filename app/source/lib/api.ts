@@ -1,7 +1,7 @@
 import { TelegramClient } from 'messaging-api-telegram';
 import { Message, Update } from 'messaging-api-telegram/dist/TelegramTypes';
-import Log from '../../util/log';
-import { Config } from '../../types/config';
+import Log from '../util/log';
+import { Config } from '../types/config';
 
 
 export default class Telegram {
