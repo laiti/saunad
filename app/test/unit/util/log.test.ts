@@ -1,4 +1,4 @@
-import Log from '../../../../source/lib/util/log';
+import Log from '../../../source/util/log';
 
 const logSpy = jest.spyOn(console, 'log').mockImplementation();
 const warnSpy = jest.spyOn(console, 'warn').mockImplementation();

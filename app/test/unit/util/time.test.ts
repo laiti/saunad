@@ -1,4 +1,4 @@
-import TimeUtil from '../../../../source/lib/util/time';
+import TimeUtil from '../../../source/util/time';
 
 describe('Time', () => {
   const time = new TimeUtil();
