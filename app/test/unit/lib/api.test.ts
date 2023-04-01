@@ -1,5 +1,4 @@
 import Telegram from '../../../source/lib/api';
-import  Telegram from '../../../source/lib/api';
 
 describe('Telegram', () => {
   test('Should send message', () => {
