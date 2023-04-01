@@ -8,10 +8,8 @@ const configuration = {
     sendOptions: { disableWebPagePreview: true, disableNotification: true },
   },
 
-  // If dynamic  is set, it overrides the static times
-  times: '23:00',
-
   saunad: {
+    time: '23:00',
     startCommandPrefix: '/saunoihin',
     endCommandPrefix: '/saunad'
   },
