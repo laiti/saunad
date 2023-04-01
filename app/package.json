@@ -1,0 +1,45 @@
+{
+  "name": "saunad",
+  "version": "1.0.0",
+  "description": "Calculate how long users have been in sauna from Telegram commands",
+  "main": "compiled/app/handlers/index.js",
+  "scripts": {
+    "build": "tsc",
+    "eslint": "./node_modules/eslint/bin/eslint.js source --ext .ts,.js",
+    "test": "NODE_ENV=localdev jest test/unit --coverage",
+    "watch": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laiti/saunad.git"
+  },
+  "keywords": [
+    "sauna",
+    "telegram"
+  ],
+  "author": "Antti Laiti <antti@laiti.fi>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/laiti/saunad/issues"
+  },
+  "homepage": "https://github.com/laiti/saunad#readme",
+  "dependencies": {
+    "config": "^3.3.9",
+    "messaging-api-telegram": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/config": "3.3.0",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.11",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
+    "eslint": "^8.37.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "jest": "^29.5.0",
+    "prettier": "^2.8.7",
+    "ts-jest": "^29.0.5",
+    "typescript": "^5.0.3"
+  }
+}
