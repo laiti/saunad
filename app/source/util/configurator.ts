@@ -9,7 +9,7 @@ import {
 } from '../types/config';
 
 export default class Configurator {
-  static async collect(): Promise<Config> {
+  static collect(): Config {
     const telegramConfig: TelegramConfig = config.get('telegram');
     const saunadConfig: SaunadConfig = config.get('saunad');
     const messageConfig: MessageConfig = config.get('messages');

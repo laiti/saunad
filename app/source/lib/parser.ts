@@ -1,5 +1,4 @@
 import { Update } from 'messaging-api-telegram/dist/TelegramTypes';
-import { config } from 'process';
 import { SaunadConfig } from '../types/config';
 import { SaunaData, MessageData } from '../types/saunad';
 import Log from '../util/log';
@@ -47,12 +46,7 @@ export default class TelegramParser {
     throw new Error('update.message.entities does not contain bot_command as type');
   }
 
-  async getSaunaers(
-    updates: Update[],
-    cmdPrefix: string,
-    minDate: Date,
-    maxDate: Date,
-  ): Promise<SaunaData> {
+  async getSaunaers(updates: Update[]): Promise<SaunaData> {
     const saunaData: SaunaData = {};
     for (const update of updates) {
       let msgData: MessageData;
