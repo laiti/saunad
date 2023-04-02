@@ -11,20 +11,21 @@ export interface TelegramConfig {
 
 export interface SaunadConfig {
   time: string;
-  startCommandPrefix: string;
-  endCommandPrefix: string;
+  startCommand: string;
+  endCommand: string;
 }
 
 interface ApiRetries {
-  1: string,
-  2: string,
-  3: string,
-  4: string,
-  5: string,
+  [Key: number]: string,
+}
+
+export interface Times {
+  [Key: number]: string[],
 }
 
 export interface MessageConfig {
   apiRetries: ApiRetries,
+  timeLimits: Times,
 }
 
 export interface Config {

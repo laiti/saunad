@@ -32,10 +32,12 @@ export default class Telegram {
 
   async getUpdatesWithRetry(): Promise<{ updates: Update[]; attempts: number; }> {
     this.log.info('Getting updates from chat');
-    let updates: Update[] = [{ updateId: 1 }];
+    const initUpdate: Update[] = [{ updateId: 0 }];
+    let updates = initUpdate;
     let attempts = 0;
     // Request API until the response is not empty or we run out of attempts
     while (
+      updates === initUpdate ||
       updates === undefined ||
       updates.length == 0 ||
       attempts >= this.config.telegram.maxAttempts
@@ -43,6 +45,7 @@ export default class Telegram {
       updates = await this.getUpdates();
       attempts++;
     }
+    this.log.debug(JSON.stringify(updates));
     return { updates, attempts };
   }
 

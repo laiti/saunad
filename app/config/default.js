@@ -10,8 +10,8 @@ const configuration = {
 
   saunad: {
     time: '23:00',
-    startCommandPrefix: '/saunoihin',
-    endCommandPrefix: '/saunad'
+    startCommand: '/saunoihin',
+    endCommand: '/saunad'
   },
 
   messages: {
@@ -21,10 +21,18 @@ const configuration = {
       3: 'rynkyti pam pam',
       4: 'rynkyti rynkyti pam pam',
       5: 'rynkyti rynkyti pam pam pam',
+    },
+    timeLimits: {
+      0:    ['PETTURIT'],
+      60:   ['MAINEHAITTAA'],
+      120:  ['EI MAINEHAITTAA'],
+      240:  ['SAUNATIMO AWARD OF HONNOURS 🏆'],
+      1000: ['RIBS'],
+      2000: ['WTF']
     }
   },
 
-  logLevel: 'info',
+  logLevel: 'info'
 };
 
 module.exports = configuration;

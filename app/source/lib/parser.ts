@@ -50,22 +50,33 @@ export default class TelegramParser {
     const saunaData: SaunaData = {};
     for (const update of updates) {
       let msgData: MessageData;
+
       // Check if the command is valid
       try {
-        msgData = await this.parseUpdate(update, [this.config.startCommandPrefix, this.config.endCommandPrefix]);
+        msgData = await this.parseUpdate(update, [this.config.startCommand, this.config.endCommand]);
       } catch (err) {
         // Errors from data are not fatal
         this.log.debug(`parser: ${err}`);
         continue;
       }
+
+      // If there is no data yet, initialize it
+      if (!(msgData.username in saunaData)) {
+        saunaData[msgData.username] = { start: undefined, end: undefined };
+      }
+
       const messageDate = new Date(msgData.date * 1000);
       // Check which command the data contains
-      if (msgData.command === this.config.startCommandPrefix) {
+      if (msgData.command === this.config.startCommand) {
         saunaData[msgData.username].start = messageDate;
-      } else if (msgData.command === this.config.endCommandPrefix) {
+        this.log.debug(`Sauna data updated: { ${msgData.username}: start: ${messageDate.toString()} }`);
+      } else if (msgData.command === this.config.endCommand) {
         saunaData[msgData.username].end = messageDate;
+        this.log.debug(`Sauna data updated: { ${msgData.username}: end: ${messageDate.toString()} }`);
+      } else {
+        this.log.info(`Unknown command ${msgData.command}`)
       }
-      this.log.debug(`Player data updated: { ${msgData.username}: ${messageDate.toString()} }`);
+      this.log.debug(`saunadata: ${JSON.stringify(saunaData)}`)
     }
     return saunaData;
   }
