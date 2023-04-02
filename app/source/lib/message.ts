@@ -9,7 +9,7 @@ export default class Message {
     
   async form(results: Times): Promise<string> {
     let message = "";
-    for (const timeLimit in Object.keys(results)) {
+    for (const timeLimit in Object.keys(this.config.timeLimits)) {
       this.log.debug(JSON.stringify(this.config.timeLimits));
       this.log.debug(JSON.stringify(Object.keys(this.config.timeLimits)));
       this.log.debug(JSON.stringify(results));
