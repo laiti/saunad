@@ -19,9 +19,11 @@ const message = new Message(log, config.messages);
   // Parse updates
   const saunaData = await parser.getSaunaers(updateData.updates);
   // Calculate result array
-  const result = await results.calculate(saunaData, updateData.attempts)
+  const result = await results.calculate(saunaData);
   // Form result message for Telegram
-  const msg = await message.form(result);
+  const msg = await message.form(result, updateData.attempts);
+
+  await telegram.send(msg);
 
   log.info(`updatedata result: ${JSON.stringify(updateData)}`);
   log.info(`saunadata result: ${JSON.stringify(saunaData)}`);

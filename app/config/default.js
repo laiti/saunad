@@ -16,7 +16,7 @@ const configuration = {
 
   messages: {
     header: 'SAUNA AWARDS',
-    hashtag: '#saunad',
+    hashTag: '#saunad',
     apiHeader: 'Telegram API was accessed: ',
     apiRetries: {
       1: 'once',

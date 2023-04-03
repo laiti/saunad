@@ -25,7 +25,7 @@ export interface Times {
 
 export interface MessageConfig {
   header: string,
-  hashtag: string,
+  hashTag: string,
   apiPrefix: string,
   apiRetries: ApiRetries,
   timeLimits: Times,
