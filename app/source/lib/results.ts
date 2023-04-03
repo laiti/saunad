@@ -41,7 +41,7 @@ export default class Results {
         results[1000].push(user);
         continue;
       }
-      const timeIn = saunaData[user].start!.getTime() - saunaData[user].end!.getTime();
+      const timeIn = saunaData[user].end!.getTime() - saunaData[user].start!.getTime();
       this.log.debug(`timeIn: ${timeIn.toString()}`)
 
       const timeInMin = Math.round(timeIn / (1000 * 60));

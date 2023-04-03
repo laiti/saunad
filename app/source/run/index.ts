@@ -13,6 +13,7 @@ const parser = new TelegramParser(log, config.saunad);
 const telegram = new Telegram(config);
 const results = new Results(log, config.messages.timeLimits );
 const message = new Message(log, config.messages);
+
 // Get updates
 (async function() {
   const updateData = await telegram.getUpdatesWithRetry();
@@ -29,5 +30,9 @@ const message = new Message(log, config.messages);
   const msg = await message.form(result, updateData.attempts);
 
   // Send message to Telegram
-  await telegram.send(msg);
+  if (msg === "") {
+    log.info("No sauna today.");
+  } else {
+    await telegram.send(msg);
+  }
 }());
