@@ -9,25 +9,24 @@ export default class Message {
     
   async form(results: Times, attempts: number): Promise<string> {
     let resultMsg = "";
-    let message = "";
-    const limits = Object.keys(this.config.timeLimits);
-    for (const timeLimit in limits) {
-      this.log.debug(`timelimits: ${JSON.stringify(this.config.timeLimits)}`);
-      this.log.debug(`keys: ${JSON.stringify(Object.keys(this.config.timeLimits))}`);
-      this.log.debug(`results: ${JSON.stringify(results)}`);
-      this.log.debug(`timeli: ${JSON.stringify(timeLimit)}`);
-      this.log.debug(`timelil: ${JSON.stringify(results[timeLimit])}`);
-      if (results[limits[timeLimit]].length > 0) {
-        resultMsg += this.config.timeLimits[limits[timeLimit]][0];
+    Object.keys(this.config.timeLimits).forEach(timeLimitStr => {
+      if (results[timeLimitStr].length > 0) {
+        resultMsg += this.config.timeLimits[timeLimitStr][0];
         resultMsg += ":\n"
-        resultMsg += results[limits[timeLimit]].toString();
-        this.log.debug(JSON.stringify(resultMsg));
+        resultMsg += results[timeLimitStr].toString();
       }
-    }
+    });
     if (resultMsg === "") {
       return resultMsg;
     }
-    message = this.config.header;
+    // Todays date
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+
+    let message = this.config.header;
+    message += ` ${dd}.${mm}.${yyyy}`;
     message += '\n\n';
     message += resultMsg;
     message += `\n\n${this.config.apiPrefix}${this.config.apiRetries[attempts]}`;

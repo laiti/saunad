@@ -76,7 +76,6 @@ export default class TelegramParser {
       } else {
         this.log.info(`Unknown command ${msgData.command}`)
       }
-      this.log.debug(`saunadata: ${JSON.stringify(saunaData)}`)
     }
     return saunaData;
   }

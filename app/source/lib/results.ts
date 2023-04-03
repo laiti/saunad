@@ -1,6 +1,7 @@
 import { SaunaData } from "../types/saunad";
 import Log from "../util/log";
 import { Times } from '../types/config';
+import { time } from "console";
 
 export default class Results {
   log: Log;
@@ -21,9 +22,10 @@ export default class Results {
     // Loop through all users in data
     for (const user in saunaData) {
       if (saunaData[user].start === undefined) {
-        // No start data, wtf
+        // No start data
         results[2000].push(user);
         continue;
+
       // No end data, still in sauna
       } else if (saunaData[user].end === undefined) {
         results[1000].push(user);
@@ -31,24 +33,27 @@ export default class Results {
       }
 
       // Undefined-checks above
-      const timeIn = Math.abs(saunaData[user].start!.getTime() - saunaData[user].end!.getTime());
+      const startTime = saunaData[user].start!.getTime();
+      const endTime = saunaData[user].end!.getTime();
+      
+      // To avoid catching a prvious session
+      if (startTime > endTime) {
+        results[1000].push(user);
+        continue;
+      }
+      const timeIn = saunaData[user].start!.getTime() - saunaData[user].end!.getTime();
+      this.log.debug(`timeIn: ${timeIn.toString()}`)
+
       const timeInMin = Math.round(timeIn / (1000 * 60));
 
       // Find the biggest time limit the result exceeds
       let biggestLimit = 0;
-      this.log.debug(`timelinits: ${JSON.stringify(this.timeLimits)}`)
-      const timeLimitNumbers = Object.keys(this.timeLimits);
-      for (const timeLimitIdx in timeLimitNumbers) {
-        this.log.debug(`timeLimitstr: ${timeLimitIdx}`);
-        //this.log.debug(`timeLimitstrfoo: ${this.timeLimits[timeLimitIdx].toString()}`);
-        const timeLimit = this.timeLimits[timeLimitNumbers[timeLimitIdx]];
-        this.log.debug(`timeLimit: ${timeLimit.toString()}`);
+      Object.keys(this.timeLimits).forEach(timeLimitStr => {
+        const timeLimit = Number(timeLimitStr);
         if (timeInMin > timeLimit && timeLimit > biggestLimit) {
           biggestLimit = timeLimit;
         }
-      }
-      this.log.debug(biggestLimit.toString());
-      this.log.debug(JSON.stringify(results));
+      });
       results[biggestLimit].push(`${user} (${timeInMin.toString()} min)`);
     }
     return results;

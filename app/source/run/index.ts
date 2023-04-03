@@ -16,17 +16,18 @@ const message = new Message(log, config.messages);
 // Get updates
 (async function() {
   const updateData = await telegram.getUpdatesWithRetry();
+  log.debug(`updatedata result: ${JSON.stringify(updateData)}`);
   // Parse updates
   const saunaData = await parser.getSaunaers(updateData.updates);
+  log.debug(`saunadata result: ${JSON.stringify(saunaData)}`);
+
   // Calculate result array
   const result = await results.calculate(saunaData);
+  log.info(`result: ${JSON.stringify(result)}`);
+
   // Form result message for Telegram
   const msg = await message.form(result, updateData.attempts);
 
+  // Send message to Telegram
   await telegram.send(msg);
-
-  log.info(`updatedata result: ${JSON.stringify(updateData)}`);
-  log.info(`saunadata result: ${JSON.stringify(saunaData)}`);
-  log.info(`result: ${JSON.stringify(result)}`);
-  log.info(`message: ${msg}`);
 }());
