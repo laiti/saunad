@@ -10,25 +10,28 @@ const configuration = {
 
   saunad: {
     time: '23:00',
-    startCommand: '/saunoihin',
-    endCommand: '/saunad'
+    startCommand: '/tosauna',
+    endCommand: '/fromsauna'
   },
 
   messages: {
+    header: 'SAUNA AWARDS',
+    hashtag: '#saunad',
+    apiHeader: 'Telegram API was accessed: ',
     apiRetries: {
-      1: 'rynkyti',
-      2: 'rynkyti pam',
-      3: 'rynkyti pam pam',
-      4: 'rynkyti rynkyti pam pam',
-      5: 'rynkyti rynkyti pam pam pam',
+      1: 'once',
+      2: 'twice',
+      3: 'three times',
+      4: 'four times',
+      5: 'five times or more',
     },
     timeLimits: {
-      0:    ['PETTURIT'],
-      60:   ['MAINEHAITTAA'],
-      120:  ['EI MAINEHAITTAA'],
-      240:  ['SAUNATIMO AWARD OF HONNOURS 🏆'],
-      1000: ['RIBS'],
-      2000: ['WTF']
+      0:    ['LESS THAN HOUR IN SAUNA 😡'],
+      60:   ['MORE THAN HOUR IN SAUNA 😠'],
+      120:  ['MORE THAN TWO HOURS IN SAUNA ☺️'],
+      240:  ['MORE THAN THREE HOURS IN SAUNA 🏆'],
+      1000: ['LOST IN SAUNA ⚰️'],
+      2000: ['NEVER WENT TO SAUNA']
     }
   },
 
