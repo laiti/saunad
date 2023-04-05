@@ -35,7 +35,7 @@ export default class TelegramParser {
     // There might be multiple entities; if one of them has type bot_command, that's enough for us. We also need to check that
     // message is in correct chat.
     for (const entity of update.message.entities) {
-      if (entity.type === 'bot_command' && update.message.chat.id.toString() != this.config.telegram.chatId) {
+      if (entity.type === 'bot_command' && update.message.chat.id.toString() == this.config.telegram.chatId) {
         return {
           text: update.message.text,
           date: update.message.date,
@@ -44,7 +44,7 @@ export default class TelegramParser {
         };
       }
     }
-    throw new Error('update.message.entities does not contain bot_command as type');
+    throw new Error('update.message.entities does not contain bot_command as type or chat ID did not match');
   }
 
   async getSaunaers(updates: Update[]): Promise<SaunaData> {
