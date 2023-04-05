@@ -9,7 +9,7 @@ import Message from '../lib/message';
 const config = Configurator.collect();
 const log = new Log(config.logLevel);
 
-const parser = new TelegramParser(log, config.saunad);
+const parser = new TelegramParser(log, config);
 const telegram = new Telegram(config);
 const results = new Results(log, config.messages.timeLimits );
 const message = new Message(log, config.messages);

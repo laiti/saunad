@@ -12,7 +12,7 @@ export default class Message {
     Object.keys(this.config.timeLimits).forEach(timeLimitStr => {
       if (results[timeLimitStr].length > 0) {
         resultMsg += this.config.timeLimits[timeLimitStr][0];
-        resultMsg += ":\n"
+        resultMsg += "\n"
         resultMsg += results[timeLimitStr].toString();
       }
     });
