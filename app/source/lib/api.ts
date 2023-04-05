@@ -34,14 +34,15 @@ export default class Telegram {
     this.log.info('Getting updates from chat');
     const initUpdate: Update[] = [{ updateId: 0 }];
     let updates = initUpdate;
-    let attempts = 0;
+    let attempts = 1;
     // Request API until the response is not empty or we run out of attempts
-    while (
+    while ((
       updates === initUpdate ||
       updates === undefined ||
-      updates.length == 0 ||
-      attempts >= this.config.telegram.maxAttempts
+      updates.length == 0 ) && 
+      attempts <= this.config.telegram.maxAttempts
     ) {
+      this.log.info(`Making attempt number ${attempts} of ${this.config.telegram.maxAttempts} to API`);
       updates = await this.getUpdates();
       attempts++;
     }

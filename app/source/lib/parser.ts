@@ -1,5 +1,5 @@
 import { Update } from 'messaging-api-telegram/dist/TelegramTypes';
-import { SaunadConfig } from '../types/config';
+import { Config } from '../types/config';
 import { SaunaData, MessageData } from '../types/saunad';
 import Log from '../util/log';
 import TimeUtil from '../util/time';
@@ -7,7 +7,7 @@ import TimeUtil from '../util/time';
 export default class TelegramParser {
   log: Log;
   time: TimeUtil;
-  constructor(log: Log, private config: SaunadConfig) {
+  constructor(log: Log, private config: Config) {
     this.log = log;
     this.time = new TimeUtil();
   }
@@ -32,9 +32,10 @@ export default class TelegramParser {
     if (matchedPrefix === "") {
       throw new Error('Unexpected command prefix');
     }
-    // There might be multiple entities; if one of them has type bot_command, that's enough for us
+    // There might be multiple entities; if one of them has type bot_command, that's enough for us. We also need to check that
+    // message is in correct chat.
     for (const entity of update.message.entities) {
-      if (entity.type === 'bot_command') {
+      if (entity.type === 'bot_command' && update.message.chat.id.toString() != this.config.telegram.chatId) {
         return {
           text: update.message.text,
           date: update.message.date,
@@ -53,7 +54,7 @@ export default class TelegramParser {
 
       // Check if the command is valid
       try {
-        msgData = await this.parseUpdate(update, [this.config.startCommand, this.config.endCommand]);
+        msgData = await this.parseUpdate(update, [this.config.saunad.startCommand, this.config.saunad.endCommand]);
       } catch (err) {
         // Errors from data are not fatal
         this.log.debug(`parser: ${err}`);
@@ -67,10 +68,10 @@ export default class TelegramParser {
 
       const messageDate = new Date(msgData.date * 1000);
       // Check which command the data contains
-      if (msgData.command === this.config.startCommand) {
+      if (msgData.command === this.config.saunad.startCommand) {
         saunaData[msgData.username].start = messageDate;
         this.log.debug(`Sauna data updated: { ${msgData.username}: start: ${messageDate.toString()} }`);
-      } else if (msgData.command === this.config.endCommand) {
+      } else if (msgData.command === this.config.saunad.endCommand) {
         saunaData[msgData.username].end = messageDate;
         this.log.debug(`Sauna data updated: { ${msgData.username}: end: ${messageDate.toString()} }`);
       } else {

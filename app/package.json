@@ -7,6 +7,7 @@
     "build": "tsc",
     "eslint": "./node_modules/eslint/bin/eslint.js source --ext .ts,.js",
     "prepare": "cd .. && husky install",
+    "run": "node compiled/run/index.js",
     "test": "NODE_ENV=localdev jest test/unit --coverage",
     "watch": "tsc -w"
   },
