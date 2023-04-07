@@ -1,11 +1,10 @@
 import { SaunaData } from "../types/saunad";
 import Log from "../util/log";
-import { Times } from '../types/config';
-import { time } from "console";
+import { MessageConfig, Times } from '../types/config';
 
 export default class Results {
   log: Log;
-  constructor(log: Log, private timeLimits: Times) {
+  constructor(log: Log, private messages: MessageConfig) {
     this.log = log;
   }
   
@@ -48,13 +47,20 @@ export default class Results {
 
       // Find the biggest time limit the result exceeds
       let biggestLimit = 0;
-      Object.keys(this.timeLimits).forEach(timeLimitStr => {
+      Object.keys(this.messages.timeLimits).forEach(timeLimitStr => {
         const timeLimit = Number(timeLimitStr);
         if (timeInMin > timeLimit && timeLimit > biggestLimit) {
           biggestLimit = timeLimit;
         }
       });
-      results[biggestLimit].push(`${user} (${timeInMin.toString()} min)`);
+
+      // If there was rounds info, add it too
+      let roundInfo = "";
+      if (saunaData[user].rounds !== undefined) {
+        roundInfo = `${saunaData[user].rounds!.toString()} ${this.messages.rounds}, `;
+      }
+
+      results[biggestLimit].push(`${user}: ${roundInfo}${timeInMin.toString()} min`);
     }
     return results;
   }

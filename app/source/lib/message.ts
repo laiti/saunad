@@ -29,8 +29,8 @@ export default class Message {
     message += ` ${dd}.${mm}.${yyyy}`;
     message += '\n\n';
     message += resultMsg;
-    message += `\n\n${this.config.apiPrefix}${this.config.apiRetries[attempts]}`;
-    message += `\n\n${this.config.hashTag}`;
+    message += `\n\n\n${this.config.apiPrefix}${this.config.apiRetries[attempts]}`;
+    message += `\n${this.config.hashTag}`;
     return message;
   }
 }

@@ -63,7 +63,7 @@ export default class TelegramParser {
 
       // If there is no data yet, initialize it
       if (!(msgData.username in saunaData)) {
-        saunaData[msgData.username] = { start: undefined, end: undefined };
+        saunaData[msgData.username] = { start: undefined, end: undefined, rounds: undefined };
       }
 
       const messageDate = new Date(msgData.date * 1000);
@@ -71,8 +71,16 @@ export default class TelegramParser {
       if (msgData.command === this.config.saunad.startCommand) {
         saunaData[msgData.username].start = messageDate;
         this.log.debug(`Sauna data updated: { ${msgData.username}: start: ${messageDate.toString()} }`);
-      } else if (msgData.command === this.config.saunad.endCommand) {
+      } else if (msgData.command.startsWith(this.config.saunad.endCommand)) {
         saunaData[msgData.username].end = messageDate;
+        // If command contained rounds info, we add it to data
+        this.log.debug(`Command being handled: ${msgData.text}`);
+        const roundsStr = msgData.text.split('@')[0].split(this.config.saunad.endCommand);
+        const rounds = Math.round(parseInt(roundsStr[1]));
+        this.log.debug(`Rounds found: ${rounds.toString()}`);
+        if (!isNaN(rounds) && rounds > 0) {
+          saunaData[msgData.username].rounds = rounds;
+        }
         this.log.debug(`Sauna data updated: { ${msgData.username}: end: ${messageDate.toString()} }`);
       } else {
         this.log.info(`Unknown command ${msgData.command}`)

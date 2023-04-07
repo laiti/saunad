@@ -11,7 +11,7 @@ const log = new Log(config.logLevel);
 
 const parser = new TelegramParser(log, config);
 const telegram = new Telegram(config);
-const results = new Results(log, config.messages.timeLimits );
+const results = new Results(log, config.messages);
 const message = new Message(log, config.messages);
 
 // Get updates
