@@ -26,6 +26,7 @@ export interface Times {
 export interface MessageConfig {
   header: string,
   hashTag: string,
+  rounds: string,
   apiPrefix: string,
   apiRetries: ApiRetries,
   timeLimits: Times,

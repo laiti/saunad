@@ -1,5 +1,5 @@
 export interface SaunaData {
-    [key: string]: { start: Date|undefined, end: Date|undefined};
+    [key: string]: { start: Date|undefined, end: Date|undefined, rounds: number|undefined};
   }
   
   export interface MessageData {

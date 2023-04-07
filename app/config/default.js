@@ -18,6 +18,7 @@ const configuration = {
     header: 'SAUNA AWARDS',
     hashTag: '#saunad',
     apiHeader: 'Telegram API was accessed: ',
+    rounds: 'rounds',
     apiRetries: {
       1: 'once',
       2: 'twice',
