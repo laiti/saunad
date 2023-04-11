@@ -12,8 +12,9 @@ export default class Message {
     Object.keys(this.config.timeLimits).forEach(timeLimitStr => {
       if (results[timeLimitStr].length > 0) {
         resultMsg += this.config.timeLimits[timeLimitStr][0];
-        resultMsg += "\n"
+        resultMsg += '\n';
         resultMsg += results[timeLimitStr].toString();
+        resultMsg += '\n\n';
       }
     });
     if (resultMsg === "") {
@@ -29,7 +30,7 @@ export default class Message {
     message += ` ${dd}.${mm}.${yyyy}`;
     message += '\n\n';
     message += resultMsg;
-    message += `\n\n\n${this.config.apiPrefix}${this.config.apiRetries[attempts]}`;
+    message += `\n${this.config.apiPrefix}${this.config.apiRetries[attempts]}`;
     message += `\n${this.config.hashTag}`;
     return message;
   }
