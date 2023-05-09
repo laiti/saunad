@@ -46,11 +46,11 @@ export default class Results {
       const timeInMin = Math.round(timeIn / (1000 * 60));
 
       // Find the biggest time limit the result exceeds
-      let biggestLimit = 0;
+      let biggestExceededLimit = 0;
       Object.keys(this.messages.timeLimits).forEach(timeLimitStr => {
         const timeLimit = Number(timeLimitStr);
-        if (timeInMin > timeLimit && timeLimit > biggestLimit) {
-          biggestLimit = timeLimit;
+        if (timeInMin >= timeLimit && timeLimit >= biggestExceededLimit) {
+          biggestExceededLimit = timeLimit;
         }
       });
 
@@ -60,7 +60,7 @@ export default class Results {
         roundInfo = `${saunaData[user].rounds!.toString()} ${this.messages.rounds}, `;
       }
 
-      results[biggestLimit].push(`${user}: ${roundInfo}${timeInMin.toString()} min`);
+      results[biggestExceededLimit].push(`${user}: ${roundInfo}${timeInMin.toString()} min`);
     }
     return results;
   }
