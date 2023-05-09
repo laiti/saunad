@@ -35,7 +35,7 @@ export default class Results {
       const startTime = saunaData[user].start!.getTime();
       const endTime = saunaData[user].end!.getTime();
       
-      // To avoid catching a prvious session
+      // To avoid catching a previous session
       if (startTime > endTime) {
         results[1000].push(user);
         continue;

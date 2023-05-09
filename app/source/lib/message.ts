@@ -13,6 +13,11 @@ export default class Message {
       if (results[timeLimitStr].length > 0) {
         resultMsg += this.config.timeLimits[timeLimitStr][0];
         resultMsg += '\n';
+        // Go through each result and add it to the message
+        results[timeLimitStr].forEach((user: string[]) => {
+          resultMsg += user.toString();
+          resultMsg += '\n';
+        });
         resultMsg += results[timeLimitStr].toString();
         resultMsg += '\n\n';
       }
