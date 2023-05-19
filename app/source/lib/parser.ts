@@ -76,25 +76,29 @@ export default class TelegramParser {
         // Check if command parameter contains start timestamp (in format HH:MM) or other users (in format @user1 @user2)
         const startStr = msgData.text.split('@')[0].split(this.config.saunad.startCommand);
 
-        // If parameter starts with @, it is a user and we add it to users without @
-        if (startStr[1].startsWith('@')) {
-          const additionalUser = startStr[1].substring(1);
-          this.log.debug(`Detected additional user ${additionalUser} set by ${msgData.username}`);
-          users.push(startStr[1].substring(1));
+        // Parse all parameters set to command
+        for (const param of startStr) {
 
-        // HH:MM format is interpreted as time
-        } else if (startStr[1].match(/^\d{1,2}:\d{1,2}$/)) {
-          const time = startStr[1].split(':');
-          const hours = parseInt(time[0]);
-          const minutes = parseInt(time[1]);
-          if (isNaN(hours) || isNaN(minutes)) {
-            this.log.info(`Invalid time format ${startStr[1]}`);
+          // If parameter starts with @, it is a user and we add it to users without @
+          if (param.startsWith('@')) {
+            const additionalUser = startStr[1].substring(1);
+            this.log.debug(`Detected additional user ${additionalUser} set by ${msgData.username}`);
+            users.push(startStr[1].substring(1));
+
+          // HH:MM format is interpreted as time
+          } else if (param.match(/^\d{1,2}:\d{1,2}$/)) {
+            const time = startStr[1].split(':');
+            const hours = parseInt(time[0]);
+            const minutes = parseInt(time[1]);
+            if (isNaN(hours) || isNaN(minutes)) {
+              this.log.info(`Invalid time format ${startStr[1]}`);
+            }
+            messageDate.setHours(hours);
+            messageDate.setMinutes(minutes);
+            this.log.debug(`Detected set start time ${startStr[1]} by ${msgData.username}`);
+          } else {
+            this.log.info(`Invalid param '${param}' in start command '${msgData.text}', ignoring it.`);
           }
-          messageDate.setHours(hours);
-          messageDate.setMinutes(minutes);
-          this.log.debug(`Detected set start time ${startStr[1]} by ${msgData.username}`);
-        } else {
-          this.log.info(`Invalid start command ${msgData.text}`);
         }
 
         // Add all users to saunadata
