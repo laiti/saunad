@@ -77,25 +77,28 @@ export default class TelegramParser {
         const startStr = msgData.text.split('@')[0].split(this.config.saunad.startCommand);
 
         // Parse all parameters set to command
-        for (const param of startStr) {
+        for (const paramRaw of startStr) {
+
+          // Trim whitespaces around parameter
+          const param = paramRaw.trim();
 
           // If parameter starts with @, it is a user and we add it to users without @
           if (param.startsWith('@')) {
-            const additionalUser = startStr[1].substring(1);
+            const additionalUser = param.substring(1);
             this.log.debug(`Detected additional user ${additionalUser} set by ${msgData.username}`);
-            users.push(startStr[1].substring(1));
+            users.push(additionalUser);
 
           // HH:MM format is interpreted as time
           } else if (param.match(/^\d{1,2}:\d{1,2}$/)) {
-            const time = startStr[1].split(':');
+            const time = param.split(':');
             const hours = parseInt(time[0]);
             const minutes = parseInt(time[1]);
             if (isNaN(hours) || isNaN(minutes)) {
-              this.log.info(`Invalid time format ${startStr[1]}`);
+              this.log.info(`Invalid time format '${param}'`);
             }
             messageDate.setHours(hours);
             messageDate.setMinutes(minutes);
-            this.log.debug(`Detected set start time ${startStr[1]} by ${msgData.username}`);
+            this.log.debug(`Detected set start time '${param}' by ${msgData.username}`);
           } else {
             this.log.info(`Invalid param '${param}' in start command '${msgData.text}', ignoring it.`);
           }
