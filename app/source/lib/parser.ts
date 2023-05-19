@@ -78,6 +78,8 @@ export default class TelegramParser {
 
         // If parameter starts with @, it is a user and we add it to users without @
         if (startStr[1].startsWith('@')) {
+          const additionalUser = startStr[1].substring(1);
+          this.log.debug(`Detected additional user ${additionalUser} set by ${msgData.username}`);
           users.push(startStr[1].substring(1));
 
         // HH:MM format is interpreted as time
@@ -90,6 +92,7 @@ export default class TelegramParser {
           }
           messageDate.setHours(hours);
           messageDate.setMinutes(minutes);
+          this.log.debug(`Detected set start time ${startStr[1]} by ${msgData.username}`);
         } else {
           this.log.info(`Invalid start command ${msgData.text}`);
         }
