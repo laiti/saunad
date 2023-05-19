@@ -61,18 +61,48 @@ export default class TelegramParser {
         continue;
       }
 
+      // pick the user who set the command
+      let users = [msgData.username];
+
       // If there is no data yet, initialize it
       if (!(msgData.username in saunaData)) {
         saunaData[msgData.username] = { start: undefined, end: undefined, rounds: undefined };
       }
 
       const messageDate = new Date(msgData.date * 1000);
+
       // Check which command the data contains
       if (msgData.command === this.config.saunad.startCommand) {
-        saunaData[msgData.username].start = messageDate;
-        this.log.debug(`Sauna data updated: { ${msgData.username}: start: ${messageDate.toString()} }`);
+        // Check if command parameter contains start timestamp (in format HH:MM) or other users (in format @user1 @user2)
+        const startStr = msgData.text.split('@')[0].split(this.config.saunad.startCommand);
+
+        // If parameter starts with @, it is a user and we add it to users without @
+        if (startStr[1].startsWith('@')) {
+          users.push(startStr[1].substring(1));
+
+        // HH:MM format is interpreted as time
+        } else if (startStr[1].match(/^\d{1,2}:\d{1,2}$/)) {
+          const time = startStr[1].split(':');
+          const hours = parseInt(time[0]);
+          const minutes = parseInt(time[1]);
+          if (isNaN(hours) || isNaN(minutes)) {
+            this.log.info(`Invalid time format ${startStr[1]}`);
+          }
+          messageDate.setHours(hours);
+          messageDate.setMinutes(minutes);
+        } else {
+          this.log.info(`Invalid start command ${msgData.text}`);
+        }
+
+        // Add all users to saunadata
+        for (const user of users) {
+          saunaData[user].start = messageDate;
+          this.log.debug(`Sauna data updated: { ${msgData.username}: start: ${messageDate.toString()} }`);
+        }
+
       } else if (msgData.command.startsWith(this.config.saunad.endCommand)) {
         saunaData[msgData.username].end = messageDate;
+
         // If command contained rounds info, we add it to data
         this.log.debug(`Command being handled: ${msgData.text}`);
         const roundsStr = msgData.text.split('@')[0].split(this.config.saunad.endCommand);
@@ -81,6 +111,7 @@ export default class TelegramParser {
         if (!isNaN(rounds) && rounds > 0) {
           saunaData[msgData.username].rounds = rounds;
         }
+
         this.log.debug(`Sauna data updated: { ${msgData.username}: end: ${messageDate.toString()} }`);
       } else {
         this.log.info(`Unknown command ${msgData.command}`)
