@@ -84,7 +84,7 @@ export default class TelegramParser {
           // If parameter starts with @, it is a user and we add it to users without @
           if (param.startsWith('@')) {
             const additionalUser = param.substring(1);
-            this.log.debug(`Detected additional user ${additionalUser} set by ${msgData.username}`);
+            this.log.debug(`Detected additional user '${additionalUser}' set by ${msgData.username}`);
             users.push(additionalUser);
 
           // HH:MM format is interpreted as time
@@ -112,7 +112,7 @@ export default class TelegramParser {
             saunaData[user] = { start: undefined, end: undefined, rounds: undefined };
           }
           saunaData[user].start = messageDate;
-          this.log.debug(`Sauna data updated: { ${msgData.username}: start: ${messageDate.toString()} }`);
+          this.log.debug(`Sauna data updated: { ${user}: start: ${messageDate.toString()} }`);
         }
 
       } else if (msgData.command.startsWith(this.config.saunad.endCommand)) {
