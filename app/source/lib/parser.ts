@@ -64,17 +64,16 @@ export default class TelegramParser {
       // pick the user who set the command
       let users = [msgData.username];
 
-      // If there is no data yet, initialize it
-      if (!(msgData.username in saunaData)) {
-        saunaData[msgData.username] = { start: undefined, end: undefined, rounds: undefined };
-      }
-
       const messageDate = new Date(msgData.date * 1000);
 
       // Check which command the data contains
       if (msgData.command === this.config.saunad.startCommand) {
         // Check if command parameter contains start timestamp (in format HH:MM) or other users (in format @user1 @user2)
-        const startStr = msgData.text.split('@')[0].split(this.config.saunad.startCommand);
+
+        // Split command parameters from command
+        const startStr = msgData.text.split(' ');
+
+        this.log.debug(`Command parameters: ${startStr}`);
 
         // Parse all parameters set to command
         for (const paramRaw of startStr) {
@@ -104,8 +103,14 @@ export default class TelegramParser {
           }
         }
 
+        this.log.debug(`Users to be added: ${users.toString()}`);
+
         // Add all users to saunadata
         for (const user of users) {
+          // If there is no data yet, initialize it
+          if (!(user in saunaData)) {
+            saunaData[user] = { start: undefined, end: undefined, rounds: undefined };
+          }
           saunaData[user].start = messageDate;
           this.log.debug(`Sauna data updated: { ${msgData.username}: start: ${messageDate.toString()} }`);
         }
