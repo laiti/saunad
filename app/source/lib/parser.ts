@@ -81,8 +81,12 @@ export default class TelegramParser {
           // Trim whitespaces around parameter
           const param = paramRaw.trim();
 
-          // If parameter starts with @, it is a user and we add it to users without @
-          if (param.startsWith('@')) {
+          // If parameter starts with /, it is a command and we skip it
+          if (param.startsWith('/')) {
+            this.log.debug(`Detected command itself: ${param}`);
+
+            // If parameter starts with @, it is a user and we add it to users without @
+          } else if (param.startsWith('@')) {
             const additionalUser = param.substring(1);
             this.log.debug(`Detected additional user '${additionalUser}' set by ${msgData.username}`);
             users.push(additionalUser);
@@ -98,6 +102,8 @@ export default class TelegramParser {
             messageDate.setHours(hours);
             messageDate.setMinutes(minutes);
             this.log.debug(`Detected set start time '${param}' by ${msgData.username}`);
+
+          // Anything else won't be handled at all
           } else {
             this.log.info(`Invalid param '${param}' in start command '${msgData.text}', ignoring it.`);
           }
