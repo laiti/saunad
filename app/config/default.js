@@ -30,7 +30,7 @@ const configuration = {
       0:    ['LESS THAN HOUR IN SAUNA 😡'],
       60:   ['MORE THAN HOUR IN SAUNA 😠'],
       120:  ['MORE THAN TWO HOURS IN SAUNA ☺️'],
-      240:  ['MORE THAN THREE HOURS IN SAUNA 🏆'],
+      180:  ['MORE THAN THREE HOURS IN SAUNA 🏆'],
       1000: ['LOST IN SAUNA ⚰️'],
       2000: ['NEVER WENT TO SAUNA']
     }
