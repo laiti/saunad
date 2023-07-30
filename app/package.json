@@ -1,6 +1,6 @@
 {
   "name": "saunad",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Calculate how long users have been in sauna from Telegram commands",
   "main": "compiled/app/handlers/index.js",
   "scripts": {
