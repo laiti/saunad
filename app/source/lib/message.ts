@@ -11,7 +11,7 @@ export default class Message {
     let resultMsg = "";
     Object.keys(this.config.timeLimits).forEach(timeLimitStr => {
       this.log.debug(`handling: ${results[timeLimitStr]}`);
-      if (results[timeLimitStr].length > 0) {
+      if (results[timeLimitStr].hasOwnProperty(length) && results[timeLimitStr].length > 0) {
         resultMsg += this.config.timeLimits[timeLimitStr][0];
         resultMsg += '\n';
         // Go through each result and add it to the message
