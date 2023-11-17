@@ -132,7 +132,7 @@ export default class TelegramParser {
       for (const user of commandData.users) {
         // If there is no data yet, initialize it
         if (!(user in saunaData)) {
-          saunaData[user] = { start: undefined, end: undefined, rounds: undefined };
+          saunaData[user] = {};
         }
         // Determine whether the date in the command is a start or end date
         if (commandData.start) {
@@ -144,7 +144,7 @@ export default class TelegramParser {
             `Sauna data updated: { ${msgData.username}: end: ${commandData.date.toString()} }`,
           );
         }
-        saunaData[msgData.username].rounds = commandData.rounds;
+        saunaData[user].rounds = commandData.rounds;
       }
     }
 
