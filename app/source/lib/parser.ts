@@ -56,9 +56,9 @@ export default class TelegramParser {
     };
 
     this.log.debug(`Command being handled: ${msgData.text}`);
-    if (msgData.text.startsWith(this.config.saunad.startCommand)) {
+    if (msgData.text.toLowerCase().startsWith(this.config.saunad.startCommand)) {
       commandData.start = true;
-    } else if (msgData.text.startsWith(this.config.saunad.endCommand)) {
+    } else if (msgData.text.toLowerCase().startsWith(this.config.saunad.endCommand)) {
       commandData.start = false;
     } else {
       throw new Error(`Unknown command: ${msgData.text}`);
@@ -68,7 +68,6 @@ export default class TelegramParser {
 
     // Split command parameters from command
     const startStr = msgData.text.split(' ');
-
     this.log.debug(`Command parameters: ${startStr}`);
 
     // Parse all parameters set to command
@@ -115,17 +114,18 @@ export default class TelegramParser {
     const saunaData: SaunaData = {};
     for (const update of updates) {
       let msgData: MessageData;
+      let commandData: CommandData;
 
       // Check if the command is valid
       try {
         msgData = await this.parseUpdate(update);
+        commandData = await this.parseCommand(msgData);
       } catch (err) {
         // Errors from data are not fatal
-        this.log.debug(`parser: ${err}`);
+        this.log.debug(`parseUpdate: ${err}`);
         continue;
       }
 
-      const commandData = await this.parseCommand(msgData);
       this.log.debug(`Users to be added: ${commandData.users.toString()}`);
 
       // Add all users to saunadata
@@ -147,6 +147,7 @@ export default class TelegramParser {
         saunaData[msgData.username].rounds = commandData.rounds;
       }
     }
+
     return saunaData;
   }
 }
