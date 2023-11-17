@@ -30,7 +30,10 @@ export default class TelegramParser {
     // There might be multiple entities; if one of them has type bot_command, that's enough for us. We also need to check that
     // message is in correct chat.
     for (const entity of update.message.entities) {
-      if (entity.type === 'bot_command' && update.message.chat.id.toString() == this.config.telegram.chatId) {
+      if (
+        entity.type === 'bot_command' &&
+        update.message.chat.id.toString() == this.config.telegram.chatId
+      ) {
         return {
           text: update.message.text,
           date: update.message.date,
@@ -38,79 +41,75 @@ export default class TelegramParser {
         };
       }
     }
-    throw new Error('update.message.entities does not contain bot_command as type or chat ID did not match');
+    throw new Error(
+      'update.message.entities does not contain bot_command as type or chat ID did not match',
+    );
   }
 
   // Parse standard object from command line parameters
   private async parseCommand(msgData: MessageData): Promise<CommandData> {
+    // pick the user who set the command
+    let commandData: CommandData = {
+      start: true,
+      users: [msgData.username],
+      date: new Date(msgData.date * 1000),
+    };
 
+    this.log.debug(`Command being handled: ${msgData.text}`);
+    if (msgData.text.startsWith(this.config.saunad.startCommand)) {
+      commandData.start = true;
+    } else if (msgData.text.startsWith(this.config.saunad.endCommand)) {
+      commandData.start = false;
+    } else {
+      throw new Error(`Unknown command: ${msgData.text}`);
+    }
 
-          // pick the user who set the command
-          let commandData: CommandData = { 
-            start: true,
-            users: [msgData.username],
-          date: new Date(msgData.date * 1000),
-        };
-      
-      this.log.debug(`Command being handled: ${msgData.text}`);
-      if (msgData.text.startsWith(this.config.saunad.startCommand)) {
-        commandData.start = true;
-      } else if (msgData.text.startsWith(this.config.saunad.endCommand)) {
-        commandData.start = false;
-      } else {
-        throw new Error(`Unknown command: ${msgData.text}`);
-      }
+    // Check if command parameter contains start timestamp (in format HH:MM) or other users (in format @user1 @user2)
 
-        // Check if command parameter contains start timestamp (in format HH:MM) or other users (in format @user1 @user2)
+    // Split command parameters from command
+    const startStr = msgData.text.split(' ');
 
-        // Split command parameters from command
-        const startStr = msgData.text.split(' ');
+    this.log.debug(`Command parameters: ${startStr}`);
 
-        this.log.debug(`Command parameters: ${startStr}`);
+    // Parse all parameters set to command
+    for (const paramRaw of startStr) {
+      // Trim whitespaces around parameter
+      const param = paramRaw.trim();
 
-        // Parse all parameters set to command
-        for (const paramRaw of startStr) {
+      // If parameter starts with /, it is a command and we skip it
+      if (param.startsWith('/')) {
+        this.log.debug(`Detected command itself: ${param}`);
 
-          // Trim whitespaces around parameter
-          const param = paramRaw.trim();
+        // If parameter starts with @, it is a user and we add it to users without @
+      } else if (param.startsWith('@')) {
+        const additionalUser = param.substring(1);
+        this.log.debug(`Detected additional user '${additionalUser}' set by ${msgData.username}`);
+        commandData.users.push(additionalUser);
 
-          // If parameter starts with /, it is a command and we skip it
-          if (param.startsWith('/')) {
-            this.log.debug(`Detected command itself: ${param}`);
-
-            // If parameter starts with @, it is a user and we add it to users without @
-          } else if (param.startsWith('@')) {
-            const additionalUser = param.substring(1);
-            this.log.debug(`Detected additional user '${additionalUser}' set by ${msgData.username}`);
-            commandData.users.push(additionalUser);
-
-          // HH:MM format is interpreted as time
-          } else if (param.match(/^\d{1,2}:\d{1,2}$/)) {
-            const time = param.split(':');
-            const hours = parseInt(time[0]);
-            const minutes = parseInt(time[1]);
-            if (isNaN(hours) || isNaN(minutes)) {
-              this.log.info(`Invalid time format '${param}'`);
-            }
-            commandData.date.setHours(hours);
-            commandData.date.setMinutes(minutes);
-            this.log.debug(`Detected set start time '${param}' by ${msgData.username}`);
-
-          // Parameter with one or two numbers is considered as rounds
-          } else if (param.match(/^\d{1,2}$/)) {
-
-
-              commandData.rounds = Math.round(parseInt(param));
-              this.log.debug(`Rounds found: ${commandData.rounds.toString()}`);
-
-          // Anything else won't be handled at all
-          } else {
-            this.log.info(`Invalid param '${param}' in start command '${msgData.text}', ignoring it.`);
-          }
-          
+        // HH:MM format is interpreted as time
+      } else if (param.match(/^\d{1,2}:\d{1,2}$/)) {
+        const time = param.split(':');
+        const hours = parseInt(time[0]);
+        const minutes = parseInt(time[1]);
+        if (isNaN(hours) || isNaN(minutes)) {
+          this.log.info(`Invalid time format '${param}'`);
         }
-  return commandData;
-}
+        commandData.date.setHours(hours);
+        commandData.date.setMinutes(minutes);
+        this.log.debug(`Detected set start time '${param}' by ${msgData.username}`);
+
+        // Parameter with one or two numbers is considered as rounds
+      } else if (param.match(/^\d{1,2}$/)) {
+        commandData.rounds = Math.round(parseInt(param));
+        this.log.debug(`Rounds found: ${commandData.rounds.toString()}`);
+
+        // Anything else won't be handled at all
+      } else {
+        this.log.info(`Invalid param '${param}' in start command '${msgData.text}', ignoring it.`);
+      }
+    }
+    return commandData;
+  }
 
   async getSaunaers(updates: Update[]): Promise<SaunaData> {
     const saunaData: SaunaData = {};
@@ -125,23 +124,24 @@ export default class TelegramParser {
         this.log.debug(`parser: ${err}`);
         continue;
       }
-      
+
       const commandData = await this.parseCommand(msgData);
-        this.log.debug(`Users to be added: ${commandData.users.toString()}`);
+      this.log.debug(`Users to be added: ${commandData.users.toString()}`);
 
-        // Add all users to saunadata
-        for (const user of commandData.users) {
-          if (commandData.start) {
-            saunaData[user].start = commandData.date;
-            this.log.debug(`Sauna data updated: { ${user}: start: ${commandData.date.toString()} }`);
-          } else {
-            saunaData[user].end = commandData.date;
-        this.log.debug(`Sauna data updated: { ${msgData.username}: end: ${commandData.date.toString()} }`);
-          }
-          saunaData[msgData.username].rounds = commandData.rounds;
+      // Add all users to saunadata
+      for (const user of commandData.users) {
+        if (commandData.start) {
+          saunaData[user].start = commandData.date;
+          this.log.debug(`Sauna data updated: { ${user}: start: ${commandData.date.toString()} }`);
+        } else {
+          saunaData[user].end = commandData.date;
+          this.log.debug(
+            `Sauna data updated: { ${msgData.username}: end: ${commandData.date.toString()} }`,
+          );
         }
-
+        saunaData[msgData.username].rounds = commandData.rounds;
       }
+    }
     return saunaData;
   }
 }
