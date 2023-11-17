@@ -9,7 +9,7 @@ import TimeUtil from '../util/time';
 export default class TelegramParser {
   log: Log;
   time: TimeUtil;
-  constructor(log: Log, private chatId, private config: SaunadConfig) {
+  constructor(log: Log, private chatId: string, private config: SaunadConfig) {
     this.log = log;
     this.time = new TimeUtil();
   }
@@ -53,9 +53,9 @@ export default class TelegramParser {
     };
 
     this.log.debug(`Command being handled: ${msgData.text}`);
-    if (msgData.text.toLowerCase().startsWith(this.config.saunad.startCommand)) {
+    if (msgData.text.toLowerCase().startsWith(this.config.startCommand)) {
       commandData.start = true;
-    } else if (msgData.text.toLowerCase().startsWith(this.config.saunad.endCommand)) {
+    } else if (msgData.text.toLowerCase().startsWith(this.config.endCommand)) {
       commandData.start = false;
     } else {
       throw new Error(`Unknown command: ${msgData.text}`);
