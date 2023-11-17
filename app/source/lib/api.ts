@@ -3,6 +3,7 @@ import { Message, Update } from 'messaging-api-telegram/dist/TelegramTypes';
 import Log from '../util/log';
 import { Config } from '../types/config';
 
+/* Functions for operating with Telegram API */
 
 export default class Telegram {
   log: Log
