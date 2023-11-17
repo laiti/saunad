@@ -4,6 +4,8 @@ import { SaunaData, MessageData } from '../types/saunad';
 import Log from '../util/log';
 import TimeUtil from '../util/time';
 
+/* Functions for parsing Telegram messages */
+
 export default class TelegramParser {
   log: Log;
   time: TimeUtil;
