@@ -147,7 +147,6 @@ export default class TelegramParser {
         saunaData[user].rounds = commandData.rounds;
       }
     }
-
     return saunaData;
   }
 }
