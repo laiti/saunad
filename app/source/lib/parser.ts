@@ -1,5 +1,5 @@
 import { Update } from 'messaging-api-telegram/dist/TelegramTypes';
-import { Config } from '../types/config';
+import { SaunadConfig } from '../types/config';
 import { SaunaData, MessageData, CommandData } from '../types/saunad';
 import Log from '../util/log';
 import TimeUtil from '../util/time';
@@ -9,7 +9,7 @@ import TimeUtil from '../util/time';
 export default class TelegramParser {
   log: Log;
   time: TimeUtil;
-  constructor(log: Log, private config: Config) {
+  constructor(log: Log, private chatId, private config: SaunadConfig) {
     this.log = log;
     this.time = new TimeUtil();
   }
@@ -30,10 +30,7 @@ export default class TelegramParser {
     // There might be multiple entities; if one of them has type bot_command, that's enough for us. We also need to check that
     // message is in correct chat.
     for (const entity of update.message.entities) {
-      if (
-        entity.type === 'bot_command' &&
-        update.message.chat.id.toString() == this.config.telegram.chatId
-      ) {
+      if (entity.type === 'bot_command' && update.message.chat.id.toString() == this.chatId) {
         return {
           text: update.message.text,
           date: update.message.date,

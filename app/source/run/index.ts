@@ -9,13 +9,13 @@ import Message from '../lib/message';
 const config = Configurator.collect();
 const log = new Log(config.logLevel);
 
-const parser = new TelegramParser(log, config);
+const parser = new TelegramParser(log, config.telegram.chatId, config.saunad);
 const telegram = new Telegram(config);
 const results = new Results(log, config.messages);
 const message = new Message(log, config.messages);
 
 // Get updates
-(async function() {
+(async function () {
   const updateData = await telegram.getUpdatesWithRetry();
   log.debug(`updatedata result: ${JSON.stringify(updateData)}`);
   // Parse updates
@@ -30,9 +30,9 @@ const message = new Message(log, config.messages);
   const msg = await message.form(result, updateData.attempts);
 
   // Send message to Telegram
-  if (msg === "") {
-    log.info("No sauna today.");
+  if (msg === '') {
+    log.info('No sauna today.');
   } else {
     await telegram.send(msg);
   }
-}());
+})();
