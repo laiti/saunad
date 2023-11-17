@@ -1,17 +1,17 @@
-import Log from "../util/log";
-import { MessageConfig, Times } from "../types/config";
+import Log from '../util/log';
+import { MessageConfig, Times } from '../types/config';
 
-/* Functionality to form a result message to be sent to Telegram */s
+/* Functionality to form a result message to be sent to Telegram */
 
 export default class Message {
   log: Log;
   constructor(log: Log, private config: MessageConfig) {
     this.log = log;
   }
-    
+
   async form(results: Times, attempts: number): Promise<string> {
-    let resultMsg = "";
-    Object.keys(this.config.timeLimits).forEach(timeLimitStr => {
+    let resultMsg = '';
+    Object.keys(this.config.timeLimits).forEach((timeLimitStr) => {
       this.log.debug(`handling: ${results[timeLimitStr]}`);
       if (results[timeLimitStr].length !== undefined && results[timeLimitStr].length > 0) {
         resultMsg += this.config.timeLimits[timeLimitStr][0];
@@ -25,7 +25,7 @@ export default class Message {
         resultMsg += '\n';
       }
     });
-    if (resultMsg === "") {
+    if (resultMsg === '') {
       return resultMsg;
     }
     // Todays date
