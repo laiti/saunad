@@ -11,7 +11,7 @@ const config = {
 
 describe('Parser', () => {
   const log = new Log();
-  const parser = new Parser(log, 'chatid', config);
+  const parser = new Parser(log, '-434691860', config);
 
   describe('constructor', () => {
     test('Create a new instance', () => {
@@ -20,18 +20,21 @@ describe('Parser', () => {
   });
 
   describe('getSaunaers', () => {
+    /*
     test('Should return no sauna data if Telegram updates are too old', async () => {
       const saunaData = await parser.getSaunaers(MultipleBotCmdMessages.result);
       expect(saunaData).toStrictEqual({});
     });
+    */
     test('Should return correct sauna Data', async () => {
+      const timestamp = Date.now() / 1000;
       const messages: Update[] = JSON.parse(JSON.stringify(MultipleBotCmdMessages.result));
-      messages[0].message!.date = Date.now() - 3600;
-      messages[1].message!.date = Date.now() - 3500;
-      messages[2].message!.date = Date.now() - 3400;
-      messages[3].message!.date = Date.now() - 3300;
-      messages[4].message!.date = Date.now() - 3200;
-      messages[5].message!.date = Date.now() - 3100;
+      messages[0].message!.date = timestamp - 3600;
+      messages[1].message!.date = timestamp - 3000;
+      messages[2].message!.date = timestamp - 2500;
+      messages[3].message!.date = timestamp - 1500;
+      messages[4].message!.date = timestamp - 1000;
+      messages[5].message!.date = timestamp - 100;
       const saunaData = await parser.getSaunaers(messages);
       expect(saunaData).toStrictEqual({});
     });

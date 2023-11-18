@@ -123,7 +123,7 @@ export const MultipleBotCmdMessages = {
           all_members_are_administrators: true,
         },
         date: 1608930679, // 2020-12-25T21:11:19+00:00
-        text: '/saunoihin',
+        text: '/saunoihin med @muumilaakso 12:00',
         entities: [{ offset: 0, length: 5, type: <const>'bot_command' }],
       },
     },
@@ -146,7 +146,7 @@ export const MultipleBotCmdMessages = {
           all_members_are_administrators: true,
         },
         date: 1608930680, // 2020-12-25T21:11:20+00:00
-        text: '/saun',
+        text: '/saunoihin',
         entities: [{ offset: 0, length: 5, type: <const>'bot_command' }],
       },
     },
@@ -192,7 +192,7 @@ export const MultipleBotCmdMessages = {
           all_members_are_administrators: true,
         },
         date: 1608990232, // 2020-12-26T13:43:52+00:00
-        text: '/saunoihin',
+        text: '/saunad @nasserume @viperface 14:03 51',
         entities: [{ offset: 0, length: 7, type: <const>'bot_command' }],
       },
     },

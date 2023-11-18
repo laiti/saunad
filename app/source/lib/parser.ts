@@ -29,18 +29,20 @@ export default class TelegramParser {
 
     // There might be multiple entities; if one of them has type bot_command, that's enough for us. We also need to check that
     // message is in correct chat.
+    let errormsg = 'does not contain bot_command as type';
     for (const entity of update.message.entities) {
-      if (entity.type === 'bot_command' && update.message.chat.id.toString() == this.chatId) {
-        return {
-          text: update.message.text,
-          date: update.message.date,
-          username: update.message.from.username,
-        };
+      if (entity.type === 'bot_command') {
+        errormsg = 'chat ID did not match';
+        if (update.message.chat.id.toString() == this.chatId) {
+          return {
+            text: update.message.text,
+            date: update.message.date,
+            username: update.message.from.username,
+          };
+        }
       }
     }
-    throw new Error(
-      'update.message.entities does not contain bot_command as type or chat ID did not match',
-    );
+    throw new Error(`update.message.entities ${errormsg}`);
   }
 
   // Parse standard object from command line parameters
