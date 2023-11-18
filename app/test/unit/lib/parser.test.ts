@@ -5,8 +5,8 @@ import { MultipleBotCmdMessages } from '../../data/updates';
 
 const config = {
   time: 'time',
-  startCommand: 'start',
-  endCommand: 'end',
+  startCommand: '/saunoihin',
+  endCommand: '/saunad',
 };
 
 describe('Parser', () => {
@@ -27,7 +27,7 @@ describe('Parser', () => {
     });
     */
     test('Should return correct sauna Data', async () => {
-      const timestamp = Date.now() / 1000;
+      const timestamp = Math.floor(Date.now() / 1000);
       const messages: Update[] = JSON.parse(JSON.stringify(MultipleBotCmdMessages.result));
       messages[0].message!.date = timestamp - 3600;
       messages[1].message!.date = timestamp - 3000;
@@ -35,8 +35,30 @@ describe('Parser', () => {
       messages[3].message!.date = timestamp - 1500;
       messages[4].message!.date = timestamp - 1000;
       messages[5].message!.date = timestamp - 100;
+      const expectedResult = {
+        bonni_moi: {
+          rounds: undefined,
+
+          start: new Date(messages[3].message!.date * 1000),
+        },
+        muumilaakso: {
+          end: new Date(messages[5].message!.date * 1000),
+          rounds: 51,
+          start: new Date(messages[2].message!.date * 1000),
+        },
+        nasserume: {
+          end: new Date(messages[5].message!.date * 1000),
+          rounds: 51,
+          start: new Date(messages[2].message!.date * 1000),
+        },
+        viperface: {
+          end: new Date(messages[5].message!.date * 1000),
+          rounds: 51,
+          start: new Date(messages[4].message!.date * 1000),
+        },
+      };
       const saunaData = await parser.getSaunaers(messages);
-      expect(saunaData).toStrictEqual({});
+      expect(saunaData).toStrictEqual(expectedResult);
     });
   });
 });
