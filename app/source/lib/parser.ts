@@ -1,6 +1,6 @@
-import { Update } from 'messaging-api-telegram/dist/TelegramTypes';
-import { Config } from '../types/config';
-import { SaunaData, MessageData, CommandData } from '../types/saunad';
+import type { Update } from 'messaging-api-telegram/dist/TelegramTypes';
+import type { Config } from '../types/config';
+import type { SaunaData, MessageData, CommandData } from '../types/saunad';
 import Log from '../util/log';
 import TimeUtil from '../util/time';
 
