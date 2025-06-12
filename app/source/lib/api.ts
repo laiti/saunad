@@ -1,7 +1,7 @@
 import { TelegramClient } from 'messaging-api-telegram';
-import { Message, Update } from 'messaging-api-telegram/dist/TelegramTypes';
+import type { Message, Update } from 'messaging-api-telegram/dist/TelegramTypes';
 import Log from '../util/log';
-import { Config } from '../types/config';
+import type { Config } from '../types/config';
 
 /* Functions for operating with Telegram API */
 
