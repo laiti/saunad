@@ -56,9 +56,10 @@ export default class Results {
 
       // If there was rounds info, add it too
       let roundInfo = "";
-      if (saunaData[user].rounds !== undefined) {
-        const roundsText = (saunaData[user].rounds > 1) ? this.messages.rounds : this.messages.round;
-        roundInfo = `${saunaData[user].rounds!.toString()} ${roundsText}, `;
+      const roundData = saunaData[user].rounds;
+      if (roundData !== undefined) {
+        const roundsText = (roundData > 1) ? this.messages.rounds : this.messages.round;
+        roundInfo = `${roundData!.toString()} ${roundsText}, `;
       }
 
       results[biggestExceededLimit].push(`${user}: ${roundInfo}${timeInMin.toString()} min`);
