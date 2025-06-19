@@ -1,5 +1,5 @@
 import Log from '../util/log';
-import type { MessageConfig, Times } from '../types/config';
+import { MessageConfig, Times } from '../types/config';
 
 /* Functionality to form a result message to be sent to Telegram */
 
