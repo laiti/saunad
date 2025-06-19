@@ -1,7 +1,7 @@
 import config from 'config';
 import { LogLevel } from './log';
 
-import type {
+import {
   Config,
   TelegramConfig,
   MessageConfig,

@@ -1,6 +1,6 @@
-import type { SaunaData } from "../types/saunad";
+import { SaunaData } from "../types/saunad";
 import Log from "../util/log";
-import type { MessageConfig, Times } from '../types/config';
+import { MessageConfig, Times } from '../types/config';
 
 export default class Results {
   log: Log;
