@@ -11,6 +11,7 @@
     "eslint": "./node_modules/eslint/bin/eslint.js source --ext .ts,.js",
     "prepare": "cd .. && husky install",
     "start": "NODE_ENV=production node compiled/run/index.js",
+    "devstart": "NODE_ENV=development node compiled/run/index.js",
     "test": "NODE_ENV=localdev jest test/unit --coverage",
     "watch": "tsc -w"
   },
